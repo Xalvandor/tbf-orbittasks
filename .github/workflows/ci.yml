@@ -23,8 +23,44 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 jobs:
+   # Coordinator: warms the npm cache and gives the matrix jobs a single
+  # upstream `needs:` target. Jobs run on separate runners, so each restores
+  # from the npm cache keyed off the committed package-lock.json.
+  install:
+    name: Warm npm cache (coordinator)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+
+  lint-and-typecheck:
+    name: Lint + Type-check
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/cache@v4
+        with:
+          path: '**/.tsbuildinfo'
+          key: tsbuildinfo-${{ hashFiles('**/*.ts') }}
+          restore-keys: |
+            tsbuildinfo-
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run typecheck
+
+  
   ci:
     name: Build, lint, test, deploy
     runs-on: ubuntu-latest
@@ -32,21 +68,6 @@ jobs:
     steps:
       - name: Check out the code
         uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Type-check
-        run: npm run typecheck
 
       - name: Test (api)
         run: npm run test --workspace=apps/api
