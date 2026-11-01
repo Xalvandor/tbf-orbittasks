@@ -26,8 +26,19 @@ A slow GitHub Actions workflow ships at [`.github/workflows/ci.yml`](./.github/w
 ## Setup
 
 ```bash
+cp .env.example .env
+# Edit .env to add JWT_SECRET and DATABASE_URL (see .env.example)
+#   JWT_SECRET=any-random-string-for-local-dev
+#   DATABASE_URL=file:.data/orbittasks.json
 npm install
-npm start
+
+# Seed the database (required: local DB starts empty, login fails without it)
+npm run seed --workspace=apps/api
+
+# Run the two dev servers (there is no root start/dev script yet;
+# adding one is part of the Makefile deliverable)
+npm run dev --workspace=apps/api
+npm run dev --workspace=apps/web
 ```
 
 That's it!
