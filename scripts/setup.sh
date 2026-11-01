@@ -8,7 +8,8 @@ set -euo pipefail
 echo "[setup] starting OrbitTasks setup ..."
 
 # typo: should be 'logs' — this will fail on systems where logss already exists
-mkdir -p logss
+#fixed
+mkdir -p logs
 
 if [[ ! -f .env ]]; then
   cp .env.example .env
