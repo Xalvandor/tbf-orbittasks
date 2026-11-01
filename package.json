@@ -7,6 +7,9 @@
     "apps/*"
   ],
   "scripts": {
+    "clean": "node scripts/clean.js",
+    "setup": "node scripts/setup.js",
+    "dev": "node scripts/dev.js",
     "install:all": "npm install --workspaces --include-workspace-root",
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
@@ -17,7 +20,7 @@
     "analyze-baseline": "node scripts/analyze-baseline.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.6"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

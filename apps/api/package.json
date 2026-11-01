@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node --import tsx src/index.ts",
+    "start": "node --env-file=../../.env --import tsx src/index.ts",
     "start:prod": "node dist/index.js",
-    "dev": "node --import tsx --watch src/index.ts",
-    "seed": "node --import tsx src/db/seed.ts",
+    "dev": "node --env-file=../../.env --import tsx --watch src/index.ts",
+    "seed": "node --env-file=../../.env --import tsx src/db/seed.ts",
     "build": "tsc",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",

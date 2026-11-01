@@ -26,20 +26,21 @@ A slow GitHub Actions workflow ships at [`.github/workflows/ci.yml`](./.github/w
 ## Setup
 
 ```bash
-cp .env.example .env
+npm run setup
+# Creates .env file and installs dependencies
+# Seeds the database
+# The file-backed database is written to apps/api/.data/orbittasks.json.
 # Edit .env to add JWT_SECRET and DATABASE_URL (see .env.example)
 #   JWT_SECRET=any-random-string-for-local-dev
 #   DATABASE_URL=file:.data/orbittasks.json
-npm install
+# This command replaces cp .env.example .env, npm install and npm run seed --workspace=apps/api
 
-# Seed the database (required: local DB starts empty, login fails without it)
-npm run seed --workspace=apps/api
-
-# Run the two dev servers (there is no root start/dev script yet;
-# adding one is part of the Makefile deliverable)
-npm run dev --workspace=apps/api
-npm run dev --workspace=apps/web
+# Runs API and web simultaneously
+# API runs on local hosts 3001
+# Web runs on local hosts 5173
+npm run dev
 ```
+You can log in with demo@orbittasks.local / Password123
 
 That's it!
 
@@ -49,11 +50,24 @@ That's it!
 npm test
 ```
 
+## Running the CI Pipelie
+
+```bash
+npm run ci
+```
+
 ## Deploying
 
 ```bash
 npm run deploy
 ```
+
+## Clean Start
+
+```bash
+npm run clean
+```
+Note for Windows users: Powershell not supported. Use Bash commands.
 
 ---
 
